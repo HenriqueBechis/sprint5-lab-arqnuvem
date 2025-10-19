@@ -1,5 +1,6 @@
 provider "aws" {
-  [cite_start]region = var.aws_region [cite: 138, 139, 141]
+  # CORREÇÃO: Adicionado o sinal de =
+  region = var.aws_region
 }
 
 # Adiciona um sufixo aleatório para garantir que o nome do bucket seja único
@@ -10,29 +11,30 @@ resource "random_string" "suffix" {
 }
 
 resource "aws_s3_bucket" "lab" {
-  # O nome do bucket agora usará a variável que contém o prefixo + o sufixo aleatório
-  [cite_start]bucket = var.bucket_name [cite: 142, 143]
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_versioning" "versioning" {
-  [cite_start]bucket = aws_s3_bucket.lab.id [cite: 147]
+  bucket = aws_s3_bucket.lab.id
   versioning_configuration {
-    [cite_start]status = "Enabled" [cite: 149]
+    status = "Enabled"
   }
 }
 
 resource "aws_instance" "app_server" {
-  [cite_start]ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2 (us-east-1) [cite: 153, 155]
-  [cite_start]instance_type = "t2.micro" [cite: 156]
+  ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2 (us-east-1) [cite: 155]
+  instance_type = "t2.micro" [cite: 156]
   tags = {
-    [cite_start]Name = "Sprint5-EC2" [cite: 157, 158, 159]
+    Name = "Sprint5-EC2" [cite: 158]
   }
 }
 
 output "bucket_name" {
-  [cite_start]value = aws_s3_bucket.lab.bucket [cite: 161, 162]
+  # CORREÇÃO: Adicionado o sinal de =
+  value = aws_s3_bucket.lab.bucket
 }
 
 output "ec2_public_ip" {
-  [cite_start]value = aws_instance.app_server.public_ip [cite: 164, 165]
+  # CORREÇÃO: Adicionado o sinal de =
+  value = aws_instance.app_server.public_ip
 }
