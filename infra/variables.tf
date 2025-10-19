@@ -4,6 +4,8 @@ variable "aws_region" {
 }
 
 variable "bucket_name" {
-  description = "Nome do bucket S3. Deve ser único globalmente."
-  default     = "lab-sprint5-arqnuvem-${random_string.suffix.result}"
+  description = "Nome fixo do bucket S3. Deve ser único globalmente."
+  # O que mudou: O valor padrão agora é o nome completo e fixo.
+  default     = "lab-sprint5-arqnuvem-2307"
 }
+
