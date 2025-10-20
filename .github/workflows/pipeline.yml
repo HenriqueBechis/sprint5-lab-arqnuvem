@@ -16,10 +16,9 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
-    
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -29,16 +28,24 @@ jobs:
           terraform init
           terraform apply -auto-approve
 
+      # ========================================================== #
+      # PASSO ADICIONADO: Configurar a chave SSH privada           #
+      # ========================================================== #
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/control-node.pem
+          chmod 600 ~/.ssh/control-node.pem
+
       - name: Configurar EC2 com Ansible
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           cd ansible
-          ansible-playbook -i inventory setup.yml
+          # Adicionado --private-key para garantir que a chave correta seja usada
+          ansible-playbook -i inventory setup.yml --private-key=~/.ssh/control-node.pem
       
       - name: Executar pipeline de dados
         run: |
-          # Adicionado comando para instalar as dependências Python
           pip install boto3 pandas
           python3 scripts/data_pipeline.py
-
