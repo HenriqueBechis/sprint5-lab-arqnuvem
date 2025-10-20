@@ -16,8 +16,12 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{secrets.AWS_SESSION_TOKEN}}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} 
+          aws-region: us-east-1
+
+    
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Apply
         run: |
@@ -32,5 +36,6 @@ jobs:
       
       - name: Executar pipeline de dados
         run: |
-          python scripts/data_pipeline.py
-
+          # Adicionado comando para instalar as dependências Python
+          pip install boto3 pandas
+          python3 scripts/data_pipeline.py
