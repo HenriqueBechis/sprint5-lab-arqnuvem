@@ -30,6 +30,8 @@ jobs:
           terraform apply -auto-approve
 
       - name: Configurar EC2 com Ansible
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           cd ansible
           ansible-playbook -i inventory setup.yml
@@ -39,3 +41,4 @@ jobs:
           # Adicionado comando para instalar as dependências Python
           pip install boto3 pandas
           python3 scripts/data_pipeline.py
+
